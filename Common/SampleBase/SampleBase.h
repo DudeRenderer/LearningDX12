@@ -17,16 +17,16 @@
 #pragma comment( lib, "D3D12.lib" )
 #pragma comment( lib, "dxgi.lib" )
 
-class D3DApp
+class SampleBase
 {
 protected:
-	D3DApp( HINSTANCE hInstance );
-	D3DApp( const D3DApp& rhs ) = delete;
-	D3DApp& operator=( const D3DApp& rhs ) = delete;
-	virtual ~D3DApp();
+	SampleBase( HINSTANCE hInstance );
+	SampleBase( const SampleBase& rhs ) = delete;
+	SampleBase& operator=( const SampleBase& rhs ) = delete;
+	virtual ~SampleBase();
 
 public:
-	static D3DApp* GetApp();
+	static SampleBase* GetApp();
 
 	HINSTANCE AppInst() const;
 	HWND      MainWnd() const;
@@ -70,7 +70,7 @@ protected:
 	void LogOutputDisplayModes( IDXGIOutput* output, DXGI_FORMAT format );
 
 protected:
-	static D3DApp* mApp;
+	static SampleBase* mApp;
 
 	HINSTANCE mhAppInst        = nullptr; // application instance handle
 	HWND      mhMainWnd        = nullptr; // main window handle
@@ -88,18 +88,20 @@ protected:
 	GameTimer mTimer;
 
 	Microsoft::WRL::ComPtr<IDXGIFactory4>  mdxgiFactory;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
-	Microsoft::WRL::ComPtr<ID3D12Device>   md3dDevice;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+    Microsoft::WRL::ComPtr<ID3D12Device>   md3dDevice;
+    Microsoft::WRL::ComPtr<ID3D12Fence>    mFence;
 
-	Microsoft::WRL::ComPtr<ID3D12Fence> mFence;
-	UINT64                              mCurrentFence = 0;
+	UINT64 mCurrentFence = 0;
 
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue>        mCommandQueue;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>    mDirectCmdListAlloc;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCommandList;
 
-	static const int                       SwapChainBufferCount = 2;
-	int                                    mCurrBackBuffer      = 0;
+    static const int SwapChainBufferCount = 2;
+    int              mCurrBackBuffer      = 0;
+
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
 

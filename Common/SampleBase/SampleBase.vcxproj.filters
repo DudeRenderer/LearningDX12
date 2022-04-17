@@ -18,7 +18,7 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="d3dApp.h">
+    <ClInclude Include="SampleBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="d3dUtil.h">
@@ -47,7 +47,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="d3dApp.cpp">
+    <ClCompile Include="SampleBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="d3dUtil.cpp">
