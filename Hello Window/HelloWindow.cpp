@@ -1,7 +1,6 @@
 #include <DirectXColors.h>
 #include "../Common/SampleBase/SampleBase.h"
 
-
 using namespace DirectX;
 
 class InitDirect3DApp : public SampleBase
