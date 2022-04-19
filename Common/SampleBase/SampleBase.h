@@ -88,18 +88,18 @@ protected:
 	GameTimer mTimer;
 
 	Microsoft::WRL::ComPtr<IDXGIFactory4>  mdxgiFactory;
-    Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
-    Microsoft::WRL::ComPtr<ID3D12Device>   md3dDevice;
-    Microsoft::WRL::ComPtr<ID3D12Fence>    mFence;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+	Microsoft::WRL::ComPtr<ID3D12Device>   md3dDevice;
+	Microsoft::WRL::ComPtr<ID3D12Fence>    mFence;
 
 	UINT64 mCurrentFence = 0;
 
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue>        mCommandQueue;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>    mDirectCmdListAlloc;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCommandList;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
-    static const int SwapChainBufferCount = 2;
-    int              mCurrBackBuffer      = 0;
+	static const int SwapChainBufferCount = 2;
+	int              mCurrBackBuffer      = 0;
 
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];

@@ -147,19 +147,21 @@ void SampleBase::OnResize()
     // Flush before changing any resources.
     FlushCommandQueue();
 
-    ThrowIfFailed( mCommandList->Reset( mDirectCmdListAlloc.Get(), nullptr ) );
+    ThrowIfFailed( m_pCommandList->Reset( mDirectCmdListAlloc.Get(), nullptr ) );
 
     // Release the previous resources we will be recreating.
     for ( int i = 0; i < SwapChainBufferCount; ++i )
+    {
         mSwapChainBuffer[i].Reset();
+    }
+
     mDepthStencilBuffer.Reset();
 
     // Resize the swap chain.
-    ThrowIfFailed( mSwapChain->ResizeBuffers(
-        SwapChainBufferCount,
-        mClientWidth, mClientHeight,
-        mBackBufferFormat,
-        DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH ) );
+    ThrowIfFailed( mSwapChain->ResizeBuffers( SwapChainBufferCount,
+                                              mClientWidth, mClientHeight,
+                                              mBackBufferFormat,
+                                              DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH ) );
 
     mCurrBackBuffer = 0;
 
@@ -213,11 +215,11 @@ void SampleBase::OnResize()
     md3dDevice->CreateDepthStencilView( mDepthStencilBuffer.Get(), &dsvDesc, DepthStencilView() );
 
     // Transition the resource from its initial state to be used as a depth buffer.
-    mCommandList->ResourceBarrier( 1, &CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );
+    m_pCommandList->ResourceBarrier( 1, &CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );
 
     // Execute the resize commands.
-    ThrowIfFailed( mCommandList->Close() );
-    ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
+    ThrowIfFailed( m_pCommandList->Close() );
+    ID3D12CommandList* cmdsLists[] = { m_pCommandList.Get() };
     mCommandQueue->ExecuteCommandLists( _countof( cmdsLists ), cmdsLists );
 
     // Wait until resize is complete.
@@ -493,12 +495,12 @@ void SampleBase::CreateCommandObjects()
         D3D12_COMMAND_LIST_TYPE_DIRECT,
         mDirectCmdListAlloc.Get(), // Associated command allocator
         nullptr,                   // Initial PipelineStateObject
-        IID_PPV_ARGS( mCommandList.GetAddressOf() ) ) );
+        IID_PPV_ARGS( m_pCommandList.GetAddressOf() ) ) );
 
     // Start off in a closed state.  This is because the first time we refer
     // to the command list we will Reset it, and it needs to be closed before
     // calling Reset.
-    mCommandList->Close();
+    m_pCommandList->Close();
 }
 
 void SampleBase::CreateSwapChain()
