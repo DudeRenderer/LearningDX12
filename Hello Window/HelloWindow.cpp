@@ -80,7 +80,7 @@ void InitDirect3DApp::Draw( const GameTimer& gt )
 
     // Set the viewport and scissor rect.  This needs to be reset whenever the command list is reset.
     m_pCommandList->RSSetViewports( 1, &mScreenViewport );
-    m_pCommandList->RSSetScissorRects( 1, &m_ScissorRect );
+    m_pCommandList->RSSetScissorRects( 1, &mScissorRect );
 
     // Clear the back buffer and depth buffer.
     m_pCommandList->ClearRenderTargetView( CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr );
