@@ -459,11 +459,11 @@ SpacesInCStyleCastParentheses: false
 # false:
 # x = (int32)y
 
-SpacesInParentheses: true
+SpacesInParentheses: false
 # true:                                  false:
 # t f( Deleted & ) & = delete;   vs.     t f(Deleted &) & = delete;
 
-SpacesInConditionalStatement: true
+SpacesInConditionalStatement: false
 # true:                                  false:
 # if ( a )  { ... }              vs.     if (a) { ... }
 # while ( i < 5 )  { ... }               while (i < 5) { ... }
