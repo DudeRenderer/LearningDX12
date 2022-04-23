@@ -21,6 +21,7 @@ private:
     virtual void OnResize() override;
     virtual void Update(const GameTimer& gt) override;
     virtual void Draw(const GameTimer& gt) override;
+    virtual void OnDestory() override;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
@@ -75,11 +76,11 @@ void InitDirect3DApp::Draw(const GameTimer& gt)
 {
     // Reuse the memory associated with command recording.
     // We can only reset when the associated command lists have finished execution on the GPU.
-    ThrowIfFailed(mDirectCmdListAlloc->Reset());
+    ThrowIfFailed(m_pDirectCmdListAlloc->Reset());
 
     // A command list can be reset after it has been added to the command queue via ExecuteCommandList.
     // Reusing the command list reuses memory.
-    ThrowIfFailed(m_pCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
+    ThrowIfFailed(m_pCommandList->Reset(m_pDirectCmdListAlloc.Get(), nullptr));
 
     // Indicate a state transition on the resource usage.
     m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -103,10 +104,10 @@ void InitDirect3DApp::Draw(const GameTimer& gt)
 
     // Add the command list to the queue for execution.
     ID3D12CommandList* cmdsLists[] = {m_pCommandList.Get()};
-    mCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
+    m_pCommandQueue->ExecuteCommandLists(_countof(cmdsLists), cmdsLists);
 
     // swap the back and front buffers
-    ThrowIfFailed(mSwapChain->Present(0, 0));
+    ThrowIfFailed(m_pSwapChain->Present(0, 0));
     mCurrBackBuffer = (mCurrBackBuffer + 1) % SwapChainBufferCount;
 
     // Wait until frame commands are complete.  This waiting is inefficient and is

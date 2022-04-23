@@ -48,6 +48,7 @@ protected:
 	virtual void OnResize();
 	virtual void Update( const GameTimer& gt ) = 0;
 	virtual void Draw( const GameTimer& gt )   = 0;
+    virtual void OnDestory()                   = 0;
 
 	// Convenience overrides for handling mouse input.
 	virtual void OnMouseDown( WPARAM btnState, int x, int y ) {}
@@ -91,14 +92,14 @@ protected:
 	GameTimer mTimer;
 
 	Microsoft::WRL::ComPtr<IDXGIFactory4>  mdxgiFactory;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+    Microsoft::WRL::ComPtr<IDXGISwapChain3> m_pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D12Device>   md3dDevice;
 	Microsoft::WRL::ComPtr<ID3D12Fence>    mFence;
 
 	UINT64 mCurrentFence = 0;
 
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue>        mCommandQueue;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>    mDirectCmdListAlloc;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue>        m_pCommandQueue;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>    m_pDirectCmdListAlloc;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
 
 	static const int SwapChainBufferCount = 2;
@@ -108,13 +109,13 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
 
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mRtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_pRtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 
 	D3D12_VIEWPORT mScreenViewport;
 	D3D12_RECT     mScissorRect;
 
-	UINT mRtvDescriptorSize       = 0;
+	UINT m_iRtvDescriptorSize       = 0;
 	UINT mDsvDescriptorSize       = 0;
 	UINT mCbvSrvUavDescriptorSize = 0;
 
