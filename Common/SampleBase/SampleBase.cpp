@@ -19,13 +19,9 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 SampleBase* SampleBase::mApp = nullptr;
 
-SampleBase* SampleBase::GetApp()
-{
-    return mApp;
-}
+SampleBase* SampleBase::GetApp() { return mApp; }
 
-SampleBase::SampleBase(HINSTANCE hInstance) :
-    mhAppInst(hInstance)
+SampleBase::SampleBase(HINSTANCE hInstance) : mhAppInst(hInstance)
 {
     // Only one D3DApp can be constructed.
     assert(mApp == nullptr);
@@ -38,25 +34,13 @@ SampleBase::~SampleBase()
         FlushCommandQueue();
 }
 
-HINSTANCE SampleBase::AppInst() const
-{
-    return mhAppInst;
-}
+HINSTANCE SampleBase::AppInst() const { return mhAppInst; }
 
-HWND SampleBase::MainWnd() const
-{
-    return mhMainWnd;
-}
+HWND SampleBase::MainWnd() const { return mhMainWnd; }
 
-float SampleBase::AspectRatio() const
-{
-    return static_cast<float>(mClientWidth) / mClientHeight;
-}
+float SampleBase::AspectRatio() const { return static_cast<float>(mClientWidth) / mClientHeight; }
 
-bool SampleBase::Get4xMsaaState() const
-{
-    return m4xMsaaState;
-}
+bool SampleBase::Get4xMsaaState() const { return m4xMsaaState; }
 
 void SampleBase::Set4xMsaaState(bool value)
 {
@@ -89,15 +73,15 @@ int SampleBase::Run()
         {
             mTimer.Tick();
 
-            if ( !mAppPaused )
+            if (!mAppPaused)
             {
                 CalculateFrameStats();
-                Update( mTimer );
-                Draw( mTimer );
+                Update(mTimer);
+                Draw(mTimer);
             }
             else
             {
-                Sleep( 100 );
+                Sleep(100);
             }
         }
     }
@@ -127,17 +111,14 @@ void SampleBase::CreateRtvAndDsvDescriptorHeaps()
     rtvHeapDesc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
     rtvHeapDesc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     rtvHeapDesc.NodeMask       = 0;
-    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-        &rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf())));
-
+    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(m_pRtvHeap.GetAddressOf())));
 
     D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc;
     dsvHeapDesc.NumDescriptors = 1;
     dsvHeapDesc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     dsvHeapDesc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     dsvHeapDesc.NodeMask       = 0;
-    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
-        &dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
+    ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(mDsvHeap.GetAddressOf())));
 }
 
 void SampleBase::OnResize()
@@ -160,10 +141,8 @@ void SampleBase::OnResize()
     mDepthStencilBuffer.Reset();
 
     // Resize the swap chain.
-    ThrowIfFailed(m_pSwapChain->ResizeBuffers(SwapChainBufferCount,
-                                              mClientWidth, mClientHeight,
-                                              mBackBufferFormat,
-                                              DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH));
+    ThrowIfFailed(m_pSwapChain->ResizeBuffers(
+        SwapChainBufferCount, mClientWidth, mClientHeight, mBackBufferFormat, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH));
 
     mCurrBackBuffer = 0;
 
@@ -200,13 +179,12 @@ void SampleBase::OnResize()
     optClear.Format               = mDepthStencilFormat;
     optClear.DepthStencil.Depth   = 1.0f;
     optClear.DepthStencil.Stencil = 0;
-    ThrowIfFailed(md3dDevice->CreateCommittedResource(
-        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-        D3D12_HEAP_FLAG_NONE,
-        &depthStencilDesc,
-        D3D12_RESOURCE_STATE_COMMON,
-        &optClear,
-        IID_PPV_ARGS(mDepthStencilBuffer.GetAddressOf())));
+    ThrowIfFailed(md3dDevice->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+                                                      D3D12_HEAP_FLAG_NONE,
+                                                      &depthStencilDesc,
+                                                      D3D12_RESOURCE_STATE_COMMON,
+                                                      &optClear,
+                                                      IID_PPV_ARGS(mDepthStencilBuffer.GetAddressOf())));
 
     // Create descriptor to mip level 0 of entire resource using the format of the resource.
     D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -217,7 +195,10 @@ void SampleBase::OnResize()
     md3dDevice->CreateDepthStencilView(mDepthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
 
     // Transition the resource from its initial state to be used as a depth buffer.
-    m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mDepthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE));
+    m_pCommandList->ResourceBarrier(1,
+                                    &CD3DX12_RESOURCE_BARRIER::Transition(mDepthStencilBuffer.Get(),
+                                                                          D3D12_RESOURCE_STATE_COMMON,
+                                                                          D3D12_RESOURCE_STATE_DEPTH_WRITE));
 
     // Execute the resize commands.
     ThrowIfFailed(m_pCommandList->Close());
@@ -401,8 +382,17 @@ bool SampleBase::InitMainWindow()
     int width  = R.right - R.left;
     int height = R.bottom - R.top;
 
-    mhMainWnd = CreateWindow(L"MainWnd", mMainWndCaption.c_str(),
-                             WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, 0, 0, mhAppInst, 0);
+    mhMainWnd = CreateWindow(L"MainWnd",
+                             mMainWndCaption.c_str(),
+                             WS_OVERLAPPEDWINDOW,
+                             CW_USEDEFAULT,
+                             CW_USEDEFAULT,
+                             width,
+                             height,
+                             0,
+                             0,
+                             mhAppInst,
+                             0);
     if (!mhMainWnd)
     {
         MessageBox(0, L"CreateWindow Failed.", 0, 0);
@@ -429,10 +419,9 @@ bool SampleBase::InitDirect3D()
     ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&mdxgiFactory)));
 
     // Try to create hardware device.
-    HRESULT hardwareResult = D3D12CreateDevice(
-        nullptr, // default adapter
-        D3D_FEATURE_LEVEL_11_0,
-        IID_PPV_ARGS(&md3dDevice));
+    HRESULT hardwareResult = D3D12CreateDevice(nullptr, // default adapter
+                                               D3D_FEATURE_LEVEL_11_0,
+                                               IID_PPV_ARGS(&md3dDevice));
 
     // Fallback to WARP device.
     if (FAILED(hardwareResult))
@@ -440,14 +429,10 @@ bool SampleBase::InitDirect3D()
         ComPtr<IDXGIAdapter> pWarpAdapter;
         ThrowIfFailed(mdxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&pWarpAdapter)));
 
-        ThrowIfFailed(D3D12CreateDevice(
-            pWarpAdapter.Get(),
-            D3D_FEATURE_LEVEL_11_0,
-            IID_PPV_ARGS(&md3dDevice)));
+        ThrowIfFailed(D3D12CreateDevice(pWarpAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&md3dDevice)));
     }
 
-    ThrowIfFailed(md3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE,
-                                          IID_PPV_ARGS(&mFence)));
+    ThrowIfFailed(md3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&mFence)));
 
     m_iRtvDescriptorSize     = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     mDsvDescriptorSize       = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
@@ -463,9 +448,7 @@ bool SampleBase::InitDirect3D()
     msQualityLevels.Flags            = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
     msQualityLevels.NumQualityLevels = 0;
     ThrowIfFailed(md3dDevice->CheckFeatureSupport(
-        D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS,
-        &msQualityLevels,
-        sizeof(msQualityLevels)));
+        D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msQualityLevels, sizeof(msQualityLevels)));
 
     m4xMsaaQuality = msQualityLevels.NumQualityLevels;
     assert(m4xMsaaQuality > 0 && "Unexpected MSAA quality level.");
@@ -488,16 +471,14 @@ void SampleBase::CreateCommandObjects()
     queueDesc.Flags                    = D3D12_COMMAND_QUEUE_FLAG_NONE;
     ThrowIfFailed(md3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_pCommandQueue)));
 
-    ThrowIfFailed(md3dDevice->CreateCommandAllocator(
-        D3D12_COMMAND_LIST_TYPE_DIRECT,
-        IID_PPV_ARGS(m_pDirectCmdListAlloc.GetAddressOf())));
+    ThrowIfFailed(md3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+                                                     IID_PPV_ARGS(m_pDirectCmdListAlloc.GetAddressOf())));
 
-    ThrowIfFailed(md3dDevice->CreateCommandList(
-        0,
-        D3D12_COMMAND_LIST_TYPE_DIRECT,
-        m_pDirectCmdListAlloc.Get(), // Associated command allocator
-        nullptr,                     // Initial PipelineStateObject
-        IID_PPV_ARGS(m_pCommandList.GetAddressOf())));
+    ThrowIfFailed(md3dDevice->CreateCommandList(0,
+                                                D3D12_COMMAND_LIST_TYPE_DIRECT,
+                                                m_pDirectCmdListAlloc.Get(), // Associated command allocator
+                                                nullptr,                     // Initial PipelineStateObject
+                                                IID_PPV_ARGS(m_pCommandList.GetAddressOf())));
 
     // Start off in a closed state.  This is because the first time we refer
     // to the command list we will Reset it, and it needs to be closed before
@@ -555,7 +536,6 @@ void SampleBase::CreateSwapChain()
         nullptr,
         &swapChain));
 
-
     ThrowIfFailed(swapChain.As(&m_pSwapChain));
 }
 
@@ -583,17 +563,12 @@ void SampleBase::FlushCommandQueue()
     }
 }
 
-ID3D12Resource* SampleBase::CurrentBackBuffer() const
-{
-    return mSwapChainBuffer[mCurrBackBuffer].Get();
-}
+ID3D12Resource* SampleBase::CurrentBackBuffer() const { return mSwapChainBuffer[mCurrBackBuffer].Get(); }
 
 D3D12_CPU_DESCRIPTOR_HANDLE SampleBase::CurrentBackBufferView() const
 {
     return CD3DX12_CPU_DESCRIPTOR_HANDLE(
-        m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),
-        mCurrBackBuffer,
-        m_iRtvDescriptorSize);
+        m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(), mCurrBackBuffer, m_iRtvDescriptorSize);
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE SampleBase::DepthStencilView() const
@@ -621,9 +596,7 @@ void SampleBase::CalculateFrameStats()
         wstring fpsStr  = to_wstring(fps);
         wstring mspfStr = to_wstring(mspf);
 
-        wstring windowText = mMainWndCaption +
-            L"    fps: " + fpsStr +
-            L"   mspf: " + mspfStr;
+        wstring windowText = mMainWndCaption + L"    fps: " + fpsStr + L"   mspf: " + mspfStr;
 
         SetWindowText(mhMainWnd, windowText.c_str());
 
@@ -635,8 +608,10 @@ void SampleBase::CalculateFrameStats()
 
 void SampleBase::LogAdapters()
 {
-    UINT                       i       = 0;
-    IDXGIAdapter*              adapter = nullptr;
+    UINT i = 0;
+
+    IDXGIAdapter* adapter = nullptr;
+
     std::vector<IDXGIAdapter*> adapterList;
     while (mdxgiFactory->EnumAdapters(i, &adapter) != DXGI_ERROR_NOT_FOUND)
     {
@@ -696,13 +671,11 @@ void SampleBase::LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format)
 
     for (auto& x : modeList)
     {
-        UINT         n = x.RefreshRate.Numerator;
-        UINT         d = x.RefreshRate.Denominator;
-        std::wstring text =
-            L"Width = " + std::to_wstring(x.Width) + L" " +
-            L"Height = " + std::to_wstring(x.Height) + L" " +
-            L"Refresh = " + std::to_wstring(n) + L"/" + std::to_wstring(d) +
-            L"\n";
+        UINT n = x.RefreshRate.Numerator;
+        UINT d = x.RefreshRate.Denominator;
+
+        std::wstring text = L"Width = " + std::to_wstring(x.Width) + L" " + L"Height = " + std::to_wstring(x.Height) +
+                            L" " + L"Refresh = " + std::to_wstring(n) + L"/" + std::to_wstring(d) + L"\n";
 
         ::OutputDebugString(text.c_str());
     }

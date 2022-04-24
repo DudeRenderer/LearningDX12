@@ -115,3 +115,8 @@ void InitDirect3DApp::Draw(const GameTimer& gt)
     // so we do not have to wait per frame.
     FlushCommandQueue();
 }
+
+void InitDirect3DApp::OnDestory()
+{
+
+}
