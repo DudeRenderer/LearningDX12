@@ -3,6 +3,9 @@ Language:        Cpp
 # BasedOnStyle:  Google
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align 
+
+# fx this required 13.0.0, but vs2019 has 12.0.0 vs2022 has 13.0.0
+#AlignArrayOfStructures: Right
 AlignConsecutiveAssignments: true 
 AlignConsecutiveDeclarations: true
 AlignEscapedNewlines: DontAlign
@@ -19,7 +22,7 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
-BinPackParameters: true
+BinPackParameters: false
 # #true:
 # void f(int aaaaaaaaaaaaaaaaaaaa, int aaaaaaaaaaaaaaaaaaaa,
 #        int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
