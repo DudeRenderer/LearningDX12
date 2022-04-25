@@ -19,7 +19,16 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
-BinPackParameters: false
+BinPackParameters: true
+# #true:
+# void f(int aaaaaaaaaaaaaaaaaaaa, int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+
+# false:
+# void f(int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+
 BraceWrapping:     
   AfterClass:      true
   AfterControlStatement: true
@@ -60,19 +69,6 @@ ForEachMacros:
   - Q_FOREACH
   - BOOST_FOREACH
 IncludeBlocks: Preserve
-IncludeCategories: 
-  - Regex:           '^"(core/pilot_prerequisites)/'
-    Priority:        -1
-  - Regex:           '^"(core)/)'
-    Priority:        5
-  - Regex:           '^"(runtime)/)'
-    Priority:        4
-  - Regex:           '^"(client|server)/)'
-    Priority:        3
-  - Regex:           '^"(sketum)/)'
-    Priority:        2
-  - Regex:           '.*'
-    Priority:        1
 IndentCaseLabels: true
 IndentWidth:     4
 IndentExternBlock: AfterExternBlock
