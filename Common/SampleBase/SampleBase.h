@@ -92,9 +92,9 @@ protected:
     Microsoft::WRL::ComPtr<IDXGIFactory4>   mdxgiFactory;
     Microsoft::WRL::ComPtr<IDXGISwapChain3> m_pSwapChain;
     Microsoft::WRL::ComPtr<ID3D12Device>    md3dDevice;
-    Microsoft::WRL::ComPtr<ID3D12Fence>     mFence;
 
-    UINT64 mCurrentFence = 0;
+    Microsoft::WRL::ComPtr<ID3D12Fence> mFence;
+    UINT64                              mCurrentFence = 0;
 
     Microsoft::WRL::ComPtr<ID3D12CommandQueue>        m_pCommandQueue;
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator>    m_pDirectCmdListAlloc;
